@@ -11,7 +11,7 @@ Route::get('/planeten', function () {
 });
 
 Route::get('/planets', function () {
-    $planets = [
+    $allPlanets = [
         [
             'name' => 'Mars',
             'description' => 'Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System, being larger than only Mercury.'
@@ -29,6 +29,22 @@ Route::get('/planets', function () {
             'description' => 'Jupiter is a gas giant and doesn\'t have a solid surface, but it may have a solid inner core about the size of Earth.'
         ],
     ];
+    
+    // Check if planet parameter exists using request() helper
+    if (request()->has('planet')) {
+        $requestedPlanet = request('planet');
+        
+        // Filter planets based on the planet parameter
+        $planets = array_filter($allPlanets, function($planet) use ($requestedPlanet) {
+            return strtolower($planet['name']) === strtolower($requestedPlanet);
+        });
+        
+        // Reset array keys after filtering
+        $planets = array_values($planets);
+    } else {
+        // No filter, show all planets
+        $planets = $allPlanets;
+    }
     
     return view('planets', compact('planets'));
 });
