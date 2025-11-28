@@ -3,16 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use Illuminate\Support\Facades\DB; // BELANGRIJK
+use App\Models\Planet;
 
 class PlanetController extends Controller
 {
     // /planets
     public function index()
     {
-        // Query Builder met DB class
-        $planets = DB::table('planets')->get();
+        // Eloquent ORM
+        $planets = Planet::all();
 
         return view('planets.index', [
             'planets' => $planets,
@@ -22,14 +21,8 @@ class PlanetController extends Controller
     // /planets/{id}
     public function show($id)
     {
-        $planet = DB::table('planets')
-            ->where('id', $id)
-            ->first();
-
-        // eventueel simpele 404
-        if (! $planet) {
-            abort(404);
-        }
+        // Eloquent ORM - findOrFail geeft automatisch 404 als niet gevonden
+        $planet = Planet::findOrFail($id);
 
         return view('planets.show', [
             'planet' => $planet,
