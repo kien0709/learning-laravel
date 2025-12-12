@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Planet extends Model
+class SolarSystem extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -13,17 +13,13 @@ class Planet extends Model
      */
     protected $fillable = [
         'name',
-        'diameter',
-        'distance_from_sun',
-        'solar_system_id',
     ];
 
     /**
-     * Get the solar system that owns the planet.
+     * Get the planets for the solar system.
      */
-    public function solarSystem()
+    public function planets()
     {
-        return $this->belongsTo(SolarSystem::class);
+        return $this->hasMany(Planet::class);
     }
 }
-

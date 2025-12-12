@@ -10,8 +10,8 @@ class PlanetController extends Controller
     // /planets
     public function index()
     {
-        // Eloquent ORM
-        $planets = Planet::all();
+        // Eloquent ORM - eager load solar system relationship
+        $planets = Planet::with('solarSystem')->get();
 
         return view('planets.index', [
             'planets' => $planets,
@@ -21,8 +21,8 @@ class PlanetController extends Controller
     // /planets/{id}
     public function show($id)
     {
-        // Eloquent ORM - findOrFail geeft automatisch 404 als niet gevonden
-        $planet = Planet::findOrFail($id);
+        // Eloquent ORM - findOrFail geeft automatisch 404 als niet gevonden - eager load solar system
+        $planet = Planet::with('solarSystem')->findOrFail($id);
 
         return view('planets.show', [
             'planet' => $planet,
